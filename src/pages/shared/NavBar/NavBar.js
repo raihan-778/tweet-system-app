@@ -5,15 +5,17 @@ const NavBar = () => {
   return (
     <div>
       <Navbar fluid={true} rounded={true}>
-        <Navbar.Brand href="https://flowbite.com/">
+        <Navbar.Brand href="/">
           <img
-            src="https://flowbite.com/docs/images/logo.svg"
-            className="mr-3 h-6 sm:h-9"
-            alt="Flowbite Logo"
+            className="w-20"
+            src="https://i.ibb.co/zQBx7d9/Tweeting.png"
+            alt="Tweeting"
           />
-          <span className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            Flowbite
-          </span>
+          <p className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
+            <span className="bg-sky-600 font-bold">
+              Tweeting<sub>System-App</sub>
+            </span>
+          </p>
         </Navbar.Brand>
         <div className="flex md:order-2">
           <Dropdown
