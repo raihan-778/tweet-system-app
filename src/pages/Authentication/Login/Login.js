@@ -8,7 +8,7 @@ import { AuthContext } from "../../../context/AuthProvider/AuthProvider";
 const Login = () => {
   const [signInError, setSignInError] = useState("");
 
-  const { signIn, googleSignIn } = useContext(AuthContext);
+  const { login, googleSignIn } = useContext(AuthContext);
   const googleProvider = new GoogleAuthProvider();
   const {
     register,
@@ -18,7 +18,7 @@ const Login = () => {
   const handleSignIn = (data) => {
     console.log(data);
     console.log(errors);
-    signIn(data.email, data.password)
+    login(data.email, data.password)
       .then((result) => {
         setSignInError("");
         console.log(result.user);
@@ -85,7 +85,7 @@ const Login = () => {
 
           <input
             className="btn mt-5 w-full max-w-xs btn-accent"
-            value="Sign Up"
+            value="Log In"
             type="submit"
           />
           <label className="label">
@@ -96,7 +96,7 @@ const Login = () => {
               </Link>
             </span>
           </label>
-          {signInError && <p>{signInError}</p>}
+          {signInError && <p className="text-orange-500">{signInError}</p>}
           <div className="divider">OR</div>
           <button
             onClick={handleGoogleSignIn}

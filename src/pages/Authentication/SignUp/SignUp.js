@@ -8,7 +8,8 @@ import { AuthContext } from "../../../context/AuthProvider/AuthProvider";
 const SignUp = () => {
   const [signupError, setSignupError] = useState("");
   const [createdUserEmail, setCreatedUserEmail] = useState("");
-  const { signUp, updateUserInfo, googleSignIn } = useContext(AuthContext);
+  const { signUp, updateUserInfo, user, googleSignIn } =
+    useContext(AuthContext);
   const googleProvider = new GoogleAuthProvider();
   const {
     register,
@@ -53,9 +54,13 @@ const SignUp = () => {
     })
       .then((res) => res.json())
       .then((data) => {
+        if (user.uid) {
+          toast.success("User saved Successfully");
+        }
         console.log(data);
         setCreatedUserEmail(email);
-      });
+      })
+      .catch((err) => console.log(err.message));
   };
 
   const handleGoogleSignIn = () => {

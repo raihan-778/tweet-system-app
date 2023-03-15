@@ -1,59 +1,130 @@
-import { Avatar, Dropdown, Navbar } from "flowbite-react";
-import React from "react";
+import React, { useContext, useState } from "react";
+import { Zoom } from "react-awesome-reveal";
+import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
+import { AuthContext } from "../../../context/AuthProvider/AuthProvider";
 
 const NavBar = () => {
-  return (
-    <div>
-      <Navbar fluid={true} rounded={true}>
-        <Navbar.Brand href="/">
-          <img
-            className="w-20"
-            src="https://i.ibb.co/zQBx7d9/Tweeting.png"
-            alt="Tweeting"
-          />
-          <p className="self-center whitespace-nowrap text-xl font-semibold dark:text-white">
-            <span className="bg-sky-600 font-bold">
-              Tweeting<sub>System-App</sub>
-            </span>
-          </p>
-        </Navbar.Brand>
-        <div className="flex md:order-2">
-          <Dropdown
-            arrowIcon={false}
-            inline={true}
-            label={
-              <Avatar
-                alt="User settings"
-                img="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-                rounded={true}
-              />
-            }
-          >
-            <Dropdown.Header>
-              <span className="block text-sm">Bonnie Green</span>
-              <span className="block truncate text-sm font-medium">
-                name@flowbite.com
-              </span>
-            </Dropdown.Header>
-            <Dropdown.Item>Dashboard</Dropdown.Item>
-            <Dropdown.Item>Settings</Dropdown.Item>
-            <Dropdown.Item>Earnings</Dropdown.Item>
-            <Dropdown.Divider />
-            <Dropdown.Item>Sign out</Dropdown.Item>
-          </Dropdown>
-          <Navbar.Toggle />
-        </div>
-        <Navbar.Collapse>
-          <Navbar.Link href="/navbars" active={true}>
-            Home
-          </Navbar.Link>
+  const { user, logOut, setUser } = useContext(AuthContext);
+  const [logOutErr, setLogOutErr] = useState("");
 
-          <Navbar.Link href="/signup">Sign Up</Navbar.Link>
-          <Navbar.Link href="/login">Sign In</Navbar.Link>
-        </Navbar.Collapse>
-        <Navbar.Link href="/navbars">About</Navbar.Link>
-      </Navbar>
-    </div>
+  const [fix, setFix] = useState(false);
+
+  const setFixed = () => {
+    if (window.scrollY >= 392) {
+      setFix(true);
+    }
+    setFix(false);
+  };
+
+  window.addEventListener("scroll", setFixed);
+  const handleSignOut = () => {
+    console.log("logout clicked");
+    logOut()
+      .then(() => {
+        console.log(user);
+        user && setUser("");
+        toast.success("User logout successfully");
+
+        setLogOutErr("");
+      })
+      .catch((err) => {
+        console.error(err.message);
+        setLogOutErr(err.message);
+      });
+  };
+
+  return (
+    <>
+      <Zoom duration={2000}>
+        <div className={fix && `fixed`}>
+          <div className={"navbar bg-[#ECECEC] shadow-xl text-cyan-400"}>
+            <div className="navbar-start">
+              <div className="dropdown">
+                <label tabIndex={0} className="btn btn-ghost lg:hidden">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-5 w-5"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M4 6h16M4 12h8m-8 6h16"
+                    />
+                  </svg>
+                </label>
+                <ul
+                  tabIndex={0}
+                  className="menu menu-compact bg-[#ECECEC] dropdown-content mt-3 p-2 shadow text-slate-600 rounded-box w-52"
+                >
+                  <button className="btn-sm btn-outline btn-accent my-2 rounded-lg ">
+                    <Link to="/">Home</Link>
+                  </button>
+                  <button className="btn-sm btn-outline btn-accent my-2 rounded-lg ">
+                    <Link to="/login">Log In</Link>
+                  </button>
+                  <button className="btn-sm btn-outline btn-accent my-2 rounded-lg ">
+                    <Link to="/blog">Blog</Link>
+                  </button>
+                </ul>
+              </div>
+              <div className="avatar online placeholder">
+                <div className="bg-neutral-focus text-neutral-content rounded-full w-12">
+                  <img
+                    src="https://i.ibb.co/zQBx7d9/Tweeting.png"
+                    alt="Tweeting"
+                    border="0"
+                  />
+                </div>
+              </div>
+              <Link
+                to="/"
+                className="btn btn-ghost normal-case font-semibold text-2xl"
+              >
+                TSA
+                <sub className="text-green-500">
+                  <small>Tweeting System App</small>
+                </sub>
+              </Link>
+            </div>
+            <div className="navbar-center  hidden lg:flex">
+              <ul className="menu menu-horizontal p-0">
+                <li>
+                  <button className="btn-sm btn-outline btn-accent mx-2 rounded-lg ">
+                    <Link to="/">Home</Link>
+                  </button>
+                </li>
+                <li>
+                  <button className="btn-sm btn-outline btn-accent my-2 rounded-lg ">
+                    <Link to="/login">Log In</Link>
+                  </button>
+                </li>
+
+                <li>
+                  <button className="btn-sm btn-outline btn-accent mx-2 rounded-lg ">
+                    <Link to="/blog">Blog</Link>
+                  </button>
+                </li>
+              </ul>
+            </div>
+            <div className="navbar-end">
+              {user?.email && (
+                <>
+                  <div className="badge badge-outline">{user?.email}</div>
+                  <button onClick={handleSignOut} className="btn">
+                    Sign Out
+                  </button>
+                </>
+              )}
+            </div>
+          </div>
+        </div>
+      </Zoom>
+    </>
   );
 };
 
